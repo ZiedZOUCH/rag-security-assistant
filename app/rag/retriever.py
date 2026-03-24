@@ -9,8 +9,14 @@ collection = client.get_or_create_collection(name=COLLECTION_NAME)
 
 def retrieve(query: str, top_k: int = 5):
     query_emb = get_embedding(query)
+
     results = collection.query(
         query_embeddings=[query_emb],
         n_results=top_k
     )
-    return results
+
+    documents = results["documents"][0]
+    metadatas = results["metadatas"][0]
+    distances = results["distances"][0]
+
+    return documents, metadatas, distances
